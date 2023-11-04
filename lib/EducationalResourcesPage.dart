@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'EducationalResource.dart';
+import 'models/EducationalResource.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 

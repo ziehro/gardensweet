@@ -3,7 +3,7 @@ import 'package:gardensweet/CommunityPage.dart';
 import 'package:gardensweet/GardenPlanPage.dart';
 import 'package:gardensweet/MarketplacePage.dart';
 import 'package:gardensweet/OpenAIPage.dart';
-import 'package:gardensweet/RecommendationsPage.dart';
+import 'package:gardensweet/LocationsPage.dart';
 import 'models/Product.dart';
 import 'ProfilePage.dart';
 

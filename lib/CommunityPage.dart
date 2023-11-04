@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
-import 'UserProfile.dart';
-import 'Post.dart';
+import 'models/UserProfile.dart';
+import 'models/Post.dart';
 
 
 
 class CommunityPage extends StatefulWidget {
-  @override
 
+    @override
+
+  _CommunityPageState createState() => _CommunityPageState();
+}
+
+class _CommunityPageState extends State<CommunityPage> {
   final List<Post> posts = [
     Post(
         '1',
         'First Post',
-        'This is the content of the first post.',
+        'I like Permaculture.',
         UserProfile('1', 'Alice', 'avatar_url'),
         DateTime.now(),
         []
@@ -19,7 +24,7 @@ class CommunityPage extends StatefulWidget {
     Post(
         '2',
         'Second Post',
-        'This is the content of the second post.',
+        'Trees are neat.',
         UserProfile('2', 'Bob', 'avatar_url'),
         DateTime.now(),
         []
@@ -28,11 +33,7 @@ class CommunityPage extends StatefulWidget {
   ];
 
 
-  _CommunityPageState createState() => _CommunityPageState();
-}
 
-class _CommunityPageState extends State<CommunityPage> {
-  final List<Post> posts = [];
 
   @override
   Widget build(BuildContext context) {

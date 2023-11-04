@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gardensweet/locationfiles/map_page.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -22,17 +23,28 @@ class _RecommendationsPageState extends State<RecommendationsPage> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: <Widget>[
-            TextField(
-              decoration: InputDecoration(labelText: 'Location'),
-              onChanged: (value) {
-                setState(() {
-                  _location = value;
-                });
-              },
-            ),
             ElevatedButton(
-              onPressed: _getRecommendations,
-              child: Text('Get Recommendations'),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => map_page(location: _location),
+                  ),
+                );
+              },
+              child: Text('View Locations'),
+            ),
+
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => map_page(location: _location),
+                  ),
+                );
+              },
+              child: Text('Add Your Location'),
             ),
             if (_recommendations.isNotEmpty)
               Text('Recommended Plants: ${_recommendations['plants']}'),

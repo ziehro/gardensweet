@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'GardenNotification.dart';
+import 'models/GardenNotification.dart';
 
 
 class NotificationsPage extends StatefulWidget {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'GardenBed.dart';
+import 'models/GardenBed.dart';
 
 
 class AddBedPage extends StatefulWidget {
