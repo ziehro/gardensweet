@@ -33,7 +33,9 @@ class map_page extends StatelessWidget {
 
 
 Future<List<List<dynamic>>> loadCsvData() async {
+  print('Before');
   final data = await rootBundle.loadString('assets/phm_us_zipcode.csv');
+  print('After');
   return const CsvToListConverter().convert(data);
 }
 
@@ -51,6 +53,7 @@ Future<Map<String, String>> loadZipCodeToZoneMapping() async {
 
   // Assuming the first column is the zip code and the second column is the USDA zone
   Map<String, String> zipToZone = {};
+  print('just got loadcsvdata');
   for (var row in csvData) {
     zipToZone[row[0].toString()] = row[1].toString();
   }
@@ -79,14 +82,30 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    loadZipCodeToZoneMapping().then((mapping) {
+    _initializeAsyncData();
+
+    print('First few entries of _zipToZoneMapping: cats');
+  }
+
+  Future<void> _initializeAsyncData() async {
+    try {
+      // Loading the zip code to zone mapping asynchronously
+      Map<String, String> mapping = await loadZipCodeToZoneMapping();
+      // Now that we have the mapping, we can safely update the state
       setState(() {
         _zipToZoneMapping = mapping;
       });
-    });
-    print('First few entries of _zipToZoneMapping: ${_zipToZoneMapping?.entries
-        .take(10)}');
+      // For debugging purposes
+      print('First few entries of _zipToZoneMapping: ${_zipToZoneMapping?.entries.take(10)}');
+    } catch (e) {
+      print('Failed to load zip code to zone mapping: $e');
+    }
   }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    }
 
   @override
   Widget build(BuildContext context) {
@@ -123,6 +142,10 @@ class _MyHomePageState extends State<MyHomePage> {
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: () async {
+                if (_zipToZoneMapping == null) {
+                  print("Still loading zip to zone mapping, please wait");
+                  return;
+                }
 
                 try {
                   Location location = await _getLocationCoordinates(
@@ -137,10 +160,12 @@ class _MyHomePageState extends State<MyHomePage> {
                     _center = LatLng(location.latitude!, location.longitude!);
                   });
 
-
+                  print('Here: $zone');
                   if (zone != null) {
+                    print('Looking up plants for zone: $zone');
                     setState(() {
                       _usdaZone = zone;
+                      print('Looking up plants for zone: zone');
                       print('Looking up plants for zone: $_usdaZone');
                     });
                   } else {
@@ -165,7 +190,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   Text('Your USDA Zone is: $_usdaZone'),
                   SizedBox(height: 20),
                   Text('Recommended Plants:'),
-                  ...?getRandomPlants(plantRecommendations['Zone $_usdaZone'])
+                  ...getRandomPlants(plantRecommendations['Zone $_usdaZone'])
                       .map((plant) => Text(plant))
                       .toList() ?? [],
                 ],
@@ -277,9 +302,13 @@ extension on LatLng {
 Map<String, String>? _zipToZoneMapping;
 
 String? getUSDAZone(String zipCode) {
-  return _zipToZoneMapping?[zipCode];
-
+  if (_zipToZoneMapping == null) {
+    print("Zip to zone mapping not yet available");
+    return null;
+  }
+  return _zipToZoneMapping![zipCode];
 }
+
 
 List<String> getRandomPlants(List<String>? plants) {
   if (plants == null || plants.isEmpty) {
